@@ -3,6 +3,9 @@ services:
   - docker
 addons:
   ssh_known_hosts: fitbit.tronica.io
+branches:
+  only:
+  - master
 before_install:
   - openssl aes-256-cbc -K $encrypted_66663064b176_key -iv $encrypted_66663064b176_iv
     -in deploy_key.enc -out deploy_key -d
