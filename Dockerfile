@@ -5,7 +5,7 @@ RUN mkdir /sample
 WORKDIR /sample
 
 ADD package.json .
-RUN ["npm", "i", "--only=production"]
+RUN ["yarn","install"]
 
 
 # Stage-2 final image
@@ -20,4 +20,4 @@ RUN mkdir -p /opt/vitals
 VOLUME /opt/vitals
 
 EXPOSE 2368
-CMD ["npm", "start", "--production"]
+CMD ["yarn", "start"]
