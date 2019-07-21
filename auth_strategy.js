@@ -15,7 +15,11 @@ module.exports = new FitbitStrategy({
     'nutrition',
     'social'
   ],
-  callbackURL: "http://localhost:8000/callback"
+  callbackURL: (
+    /prod/.test(process.env.NODE_ENV) ?
+      "http://localhost:8000/callback" :
+      "https://vitals.tronica.io/callback"
+  )
 }, function(access_token, refresh_token, profile, done) {
 
   db.set('access_token', access_token).value();
