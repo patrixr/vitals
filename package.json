@@ -6,10 +6,10 @@
   "author": "Pat",
   "license": "MIT",
   "scripts": {
-    "serve": "node server.js",
+    "serve": "node app.js",
     "start": "npm run serve",
     "build": "parcel build webapp/index.html --out-dir dist",
-    "dev": "PARCEL_DEV=true npm run serve"
+    "dev": "NODE_ENV=development npm run serve"
   },
   "dependencies": {
     "axios": "^0.19.0",

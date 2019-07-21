@@ -1,5 +1,9 @@
 version: "3.3"
 
+branches:
+  only:
+  - master
+
 services:
   fitbit_app:
     build: .
