@@ -14,8 +14,18 @@ passport.use(auth_strategy);
 
 // --> Middlewares
 
+function has_been_set_up() {
+  return !!db.get('access_token').value();
+}
+
+function load_data() {
+  if (has_been_set_up()) {
+    api.fetch_activities();
+  }
+}
+
 const one_time_only = (req, res, next) => {
-  if (db.get('access_token').value()) {
+  if (has_been_set_up()) {
     const error = 'Already set up';
     return res.status(400).json({ error });
   }
@@ -46,15 +56,13 @@ const fitbit_authenticate = passport.authenticate('fitbit', {
 app.get('/login',     one_time_only,  fitbit_authenticate);
 app.get('/callback',  one_time_only,  fitbit_authenticate);
 
-// -------> Subscription
-app.post('/webhook', (req, res) => {
-
-});
-
 // -------> Data
 app.get('/stats', password_protected, async (req, res) => {
-  const data = await api.fetch_activities();
-  res.json(data);
+  res.json(
+    db
+      .get('stats')
+      .value()
+  );
 });
 
 // --> Default error handler
@@ -73,4 +81,11 @@ app.listen(8000, () => {
   const bundler     = new Bundler(entryFile, { outDir });
 
   app.use('/', password_protected, bundler.middleware());
+
+
+  //
+  // Poll data
+  //
+  load_data();
+  setInterval(load_data, 5 * 60 * 1000)
 });

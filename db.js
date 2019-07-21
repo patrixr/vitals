@@ -11,7 +11,8 @@ const db = low(adapter);
 db.defaults({
   access_token: '',
   refresh_token: '',
-  user: {}
+  user: {},
+  stats: {}
 }).write();
 
 module.exports = db;

@@ -47,6 +47,7 @@ class API {
 
     _.each(data_sets, ({ data }) => _.extend(res, data));
 
+    res.update_at = Date.now();
     db.set('stats', res).write();
 
     return res;
