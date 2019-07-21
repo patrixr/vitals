@@ -47,6 +47,8 @@ class API {
 
     _.each(data_sets, ({ data }) => _.extend(res, data));
 
+    db.set('stats', res).write();
+
     return res;
   }
 

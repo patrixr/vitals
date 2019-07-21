@@ -17,8 +17,8 @@ module.exports = new FitbitStrategy({
   ],
   callbackURL: (
     /prod/.test(process.env.NODE_ENV) ?
-      "http://localhost:8000/callback" :
-      "https://vitals.tronica.io/callback"
+      "https://vitals.tronica.io/callback" :
+      "http://localhost:8000/callback"
   )
 }, function(access_token, refresh_token, profile, done) {
 
