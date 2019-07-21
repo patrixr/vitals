@@ -8,9 +8,9 @@ services:
       - "8000:8000"
     environment:
       NODE_ENV: "production"
-      VIRTUAL_HOST: "fitbit.tronica.io"
+      VIRTUAL_HOST: "fitbit.tronica.io,vitals.tronica.io"
       VIRTUAL_PORT: "8000"
-      LETSENCRYPT_HOST: "fitbit.tronica.io"
+      LETSENCRYPT_HOST: "fitbit.tronica.io,vitals.tronica.io"
       LETSENCRYPT_EMAIL: "patrixr.dev@gmail.com"
       FITBIT_CLIENT_ID: ${FITBIT_CLIENT_ID}
       FITBIT_CLIENT_SECRET: ${FITBIT_CLIENT_SECRET}

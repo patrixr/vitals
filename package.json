@@ -1,8 +1,8 @@
 {
-  "name": "pocket-vue-seed",
+  "name": "vitals",
   "version": "1.0.0",
-  "description": "A seed project with Pocket and Vue",
-  "main": "server.js",
+  "description": "A fitbit dashboard",
+  "main": "app.js",
   "author": "Pat",
   "license": "MIT",
   "scripts": {
