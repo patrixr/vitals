@@ -16,5 +16,8 @@ COPY . .
 
 COPY --from=dep /sample/node_modules ./node_modules
 
+RUN mkdir -p /opt/vitals
+VOLUME /opt/vitals
+
 EXPOSE 2368
 CMD ["npm", "start", "--production"]

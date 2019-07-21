@@ -7,6 +7,7 @@ services:
     ports:
       - "8000:8000"
     environment:
+      NODE_ENV: "production"
       VIRTUAL_HOST: "fitbit.tronica.io"
       VIRTUAL_PORT: "8000"
       LETSENCRYPT_HOST: "fitbit.tronica.io"
@@ -16,7 +17,7 @@ services:
       APP_LOGIN: ${APP_LOGIN}
       APP_PASSWORD: ${APP_PASSWORD}
     volumes:
-      - "db.json:db.json"
+      - "/opt/vitals:/opt/vitals"
 
   nginx-proxy:
     image: jwilder/nginx-proxy
