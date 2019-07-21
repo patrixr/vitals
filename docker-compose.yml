@@ -1,0 +1,46 @@
+version: "3.3"
+
+services:
+  fitbit_app:
+    build: .
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      VIRTUAL_HOST: "fitbit.tronica.io"
+      VIRTUAL_PORT: "2368"
+      LETSENCRYPT_HOST: "fitbit.tronica.io"
+      LETSENCRYPT_EMAIL: "patrixr.dev@gmail.com"
+      FITBIT_CLIENT_ID: ${FITBIT_CLIENT_ID}
+      FITBIT_CLIENT_SECRET: ${FITBIT_CLIENT_SECRET}
+      APP_LOGIN: ${APP_LOGIN}
+      APP_PASSWORD: ${APP_PASSWORD}
+    volumes:
+      - "db.json:db.json"
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /opt/nginx/certs:/etc/nginx/certs
+      - /opt/nginx/vhost.d:/etc/nginx/vhost.d
+      - /opt/nginx/html:/usr/share/nginx/html
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    environment:
+      NGINX_PROXY_CONTAINER: nginx-proxy
+      DEFAULT_EMAIL: "patrixr.dev@gmail.com"
+    volumes:
+      - /opt/nginx/vhost.d:/etc/nginx/vhost.d
+      - /opt/nginx/certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /opt/nginx/html:/usr/share/nginx/html

@@ -1,0 +1,27 @@
+language: minimal
+services:
+- docker
+addons:
+  ssh_known_hosts: fitbit.tronica.io
+  before_install:
+  - openssl aes-256-cbc -K $encrypted_3eb3d26b78a7_key -iv $encrypted_3eb3d26b78a7_iv
+    -in deploy_key.enc -out deploy_key -d
+  - chmod 600 ./deploy_key
+  - eval "$(ssh-agent -s)"
+  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add ./deploy_key </dev/null
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
+    -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+script:
+- docker-compose -H "ssh://$REMOTE_HOST" down
+- docker-compose -H "ssh://$REMOTE_HOST" pull
+- docker-compose -H "ssh://$REMOTE_HOST" up -d
+env:
+  global:
+  - DOCKER_COMPOSE_VERSION=1.24.1
+  - secure: rnT+Np6qylokuic4cOgyQQ0fgfcYbnwJylRuG+hk3gy27DSy36zhmOztkPd1zv/hHdsQ8r3OsfECTVmrZJQZye96v1TJh/THj2zCCNFsa2bQFAPTh4ph7tseILyyvundiLaUGCpVRC6Ixn/6T96TmadznpUY1SfDOZifXPXCBARjbma/C5KfdwNTf3ZWsdmkFvlmB5LV281YH2/x4cu9RhWeWIoTgEBk3ZwRtZaLQm1CVe1SLedhcPkuTaFvYHd0KC/JL0PFcI4tJFUmKol6scI2dN67wxuo4GGy3Lp6a3OQSNVtpzs6OeHtBSXRHZuFvhnEZeGKxiDL1z7WH/ySuxyYYwQG9YyQJjFjhccSwXnFXxViHRgChFP9KpO61pLYjj5wI1ztXevfxfCb1rPI4V+zD68ty1KkHFl4VXb4jlHfqRNukyOt+yl4otc/BWFgL611JbVeq2yMU7KQC42SWCLLIPUV7WG87DNfui9gPGLtPzJP5u8pQjYckF3bCsY3rFQAOS0hAklcLw3LDRFMobEqRxusqofKJ9zqhGNmD5SnRJ4W0MEzThFRpWlHx5jCgzhPOtyhl8d7B+hBkEXDJNwka/9OAeH32vzeyqecSAEOKuvdt8uZrTS4NSD7WOpKJIO+hKCPK5EIl+tMQxKNflDSUGb7N1XapOfTnWIbejY=
+  - secure: wdSpOqLSYUlOKc4+7we+iI7gfPg7pPiIAdjEUdYjsJdPlJGzhE4gk5/35KM4AbIfNEO0wT4lWWA7fPXDK1+OyOyIpk3u50IrgNnffDWcGjZOwWNmMSLS1vFrO8K+mwvdV73CpIUVvnuXVCaxlGg5dxAqT5N4aGZY7IMf6Ewtg6nKDzJqDlZPqqBftpeu5A6q/BDcNkICwDR2ldoxJcY1rkj5NjOcuwSMluDCiRQRi8TnVK/YyQ5LECU4srzWpl1wmegAkkYnv90TJsy02/3evlBbQsx7XjjUJevkEyz8icAmOcu1Z7s5LulugxoItYbipMvM3mI7Otf5+LIqGBaYlVCRIZ9+5BBrZIZwmMD2QeSZZ0y3SGyxTUWdro09naeagy6oBhrJqirC4LfWdKt0Kw9K5X+rJXVQJS2J9dff7bpXoibuARjRKeFT3u8Qt/SfxQZ43VOeJjvTeNsCRGR+p4DQM5VMqh6vJFP8cAchpca2V3jIA5Dq8F2UYilvwrtfbKKPn5jwuVGw/zv+Yr+IWDtC1GMtyHQwyz1QfdgxmQSrE2kASD8KU2oYSGVnYbNHw8f3vY5s+FF2lSJ9vHI5n7H+CVndW5vO1JJtIZEh8glm7xqO0e+VEFIrpp26bPC+IqkBD0kdKdAiHyUPpQ2IWnpqcNmQjtCS28UzVRou6+U=
+  - secure: OH8qv2JHxlkOkk1XFNAiIook5G9uFoUUjeytMXKPGskifqnpqJ6IDMfZo0u4g/GMj8LrVupGBIGvneO78AZGPUKmi/Qar0wy+Fo3u4J7yBvo+tXrex8kJmRuTifqO6+M4pr79WNlL0OObjWa2JF2jUuPJduevwcrrdMpA5Fd2UP891LYtrzYTSQzN1z/hI1WYdcNa59BKtHaViMh5X4rDBqZgRfAPYA/5e8jEJSv3lYcCd3Uv4hH5CY87fnz6i44CibZz7Ema9ZkYeq2XmnNIMHFWc13+RtPcdZbhVxF7mS+nrFDs5wNCzS0MM15WXYDXFT/O3TDLABrk57N4Qxbk9UfFiM5Nzrxj6dZHAvMB8uHh+p1zcAedbeSKM9Rwx3NKtHh9bs0mr9UqcWsl/5wZiRRC86p12E2NpLpax8h3tZA1skmrGAV8+yazhreSjyvHq0ITEthicaz6d3tl4t7iBwi2bialT1CMYmXXFGcZHSFQuuD6dfB6309QAG3kI5d7okyK/zYpLJ2yZjx2YsqAbZgN1HiOXHoEyn3I7wALRCjwP6BkSGw65N/tBELAXpcXdwv9F2VXOsXSRA0TqSpUpHF/GhagQJ322hBUMTMbsMdCK3lKkkI1eUtuDD3GkUg9CXiMcT8SV5JK1tbyH10r3k2exktRnkq4EGLFVzv+Jk=
+  - secure: Ap+Nrn707tIzk6gz4/mH8f0cGqDbGVxwGLopDMj9715r5Tnd+6UGPaQKuB713E5nD5Wy8fhxEkBdHy+tNUNDFw9R0Gi2oObXrhskUnqDQbvYPDeETs3R/ORdBLPeXGMtbpgqLWkINDJ6Avkhf600NbmLt51vNO+ErW7rZVc+IeI5nrgb1H1o0mP5lvgkM27Bk4hGJPK7wTodnbB+duomQay0w/rso1qkSygSSTwvMwGLERhrgnIP4+qRGqBVn/Wt8VxWyRpakaqyQtKu+kZZ8JNt4vT/sZSCXcAPkPCEn8EKarGwvAvxYK4Es8JfcbE7uObxnLRI/HX1VnMVIF4jY2a+a7Qc3T4uutu+UfPYvDWfSixoxroKgA4vfgXYXFeJ67DQvQ0/zLTp8o4p+5JDQ7weDfRUSleGWPxz23+Mv8lSIq6WM/YNkfqVQCQGRDIaTHzEuHQxHnvHk/VZgysbBQ4YLGT/5W4bfwAeJQNC/0J9Fu18G1/AYLrkzwitXAykdN3zDk361glsSBBW1NI20OyaLIFTlPDtCrKHpgct9N0jpWEPa5mdKt2B7I1LKVZ5nLqeZbMK8HVbxR1sO9OMe7KQXGjstUz0yCuuLwd7uFs92u6ROQv859X2awtiEOd9R0X4vWiLGVpzhSoN3xWsyi1N9xKzqWfAB9a4YA5zsQ4=
