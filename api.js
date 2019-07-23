@@ -27,7 +27,7 @@ const DATA_POINTS = {
   HEART: user => {
     const now = moment().tz(user.timezone);
     const time_to =  now.format('HH:mm');
-    const time_from = now.subtract(60, 'minutes').format('HH:mm');
+    const time_from = now.subtract(1, 'day').format('HH:mm');
     return `activities/heart/date/today/1d/1min/time/${time_from}/${time_to}.json`;
   }
 }

@@ -1,0 +1,70 @@
+@import "./fonts.scss";
+@import "./colors.scss";
+
+$html-font-size-lg: 22px;
+$html-font-size-md: 20px;
+$html-font-size-sm: 18px;
+$html-font-size-xs: 16px;
+
+html {
+  font-family: $base-font;
+  font-size: $html-font-size-lg;
+  line-height: 23px;
+  -webkit-font-smoothing: antialiased;
+
+  @media (max-width: 1024px) {
+    font-size: $html-font-size-md;
+  }
+
+  @media (max-width: 640px) {
+    font-size: $html-font-size-sm;
+  }
+
+  @media (max-width: 480px) {
+    font-size: $html-font-size-xs;
+  }
+
+  p {
+    font-size: 1.4rem;
+    padding: 1rem;
+
+    &.small {
+      font-size: 1.2rem;
+    }
+  }
+
+  body {
+    // Disable scrolling
+    position: fixed;
+    overflow-y: hidden;
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+  }
+}
+
+h1 {
+  font-size: 2rem;
+  font-family: $base-font-light;
+}
+
+ul {
+  list-style: none;
+}
+
+section {
+  width: 100%;
+  min-height: 30px;
+}
+
+.application {
+  .v-footer {
+    .v-btn {
+      @for $i from 1 through 6 {
+        &:nth-child(#{$i}) {
+          transform: translateY(-($i - 1) * 120%);
+        }
+      }
+    }
+  }
+}

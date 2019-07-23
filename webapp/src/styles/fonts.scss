@@ -1,0 +1,23 @@
+$name: "Quicksand";
+
+@font-face {
+  font-family: #{$name}-Bold;
+  src: url(fonts/#{$name}-Bold.ttf);
+}
+@font-face {
+  font-family: #{$name}-Light;
+  src: url(fonts/#{$name}-Light.ttf);
+}
+@font-face {
+  font-family: #{$name}-Medium;
+  src: url(fonts/#{$name}-Medium.ttf);
+}
+@font-face {
+  font-family: #{$name}-Regular;
+  src: url(fonts/#{$name}-Regular.ttf);
+}
+
+$base-font: #{$name}-Regular;
+$base-font-bold: #{$name}-Bold;
+$base-font-light: #{$name}-Light;
+$base-font-medium: #{$name}-Medium;

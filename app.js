@@ -20,7 +20,9 @@ function has_been_set_up() {
 
 function load_data() {
   if (has_been_set_up()) {
-    api.fetch_activities();
+    api.fetch_activities().catch(e => {
+      console.error(e);
+    });
   }
 }
 
@@ -63,6 +65,10 @@ app.get('/stats', password_protected, async (req, res) => {
       .get('stats')
       .value()
   );
+});
+
+app.get('/user', password_protected, async (req, res) => {
+  res.json(db.get('user').value());
 });
 
 // --> Default error handler
