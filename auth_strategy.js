@@ -22,12 +22,12 @@ module.exports = new FitbitStrategy({
   )
 }, function(access_token, refresh_token, profile, done) {
 
-  db.set('access_token', access_token).value();
-  db.set('refresh_token', refresh_token).value();
-  db.set('user', profile._json.user).value();
-  db.set('user_id', profile.id).value();
-  db.set('display_name', profile.displayName).value();
-  db.write();
+  db.set('access_token', access_token);
+  db.set('refresh_token', refresh_token);
+  db.set('user', profile._json.user);
+  db.set('user_id', profile.id);
+  db.set('display_name', profile.displayName);
+  db.sync();
   done(null, {
     accessToken: access_token,
     refreshToken: refresh_token,

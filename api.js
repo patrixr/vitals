@@ -48,7 +48,8 @@ class API {
     _.each(data_sets, ({ data }) => _.extend(res, data));
 
     res.update_at = Date.now();
-    db.set('stats', res).write();
+    db.set('stats', res);
+    db.sync();
 
     return res;
   }
@@ -60,12 +61,11 @@ class API {
   }
 
   get bearer_token() {
-    return db.get('access_token').value();
+    return db.get('access_token');
   }
 
   get user() {
-    this._user = this._user || db.get('user').value();
-    return this._user;
+    return db.get('user');
   }
 
   get user_id() {
@@ -85,7 +85,6 @@ class API {
     }
   }
 
-
   async refresh_token() {
     const url = 'https://api.fitbit.com/oauth2/token';
     const { data } = await axios({
@@ -96,15 +95,15 @@ class API {
       },
       data: qs.stringify({
         grant_type: 'refresh_token',
-        refresh_token: db.get('refresh_token').value()
+        refresh_token: db.get('refresh_token')
       }),
       url
     });
 
     const { access_token, refresh_token } = data;
-    db.set('access_token', access_token).value();
-    db.set('refresh_token', refresh_token).value();
-    db.write();
+    db.set('access_token', access_token);
+    db.set('refresh_token', refresh_token);
+    db.sync();
   }
 };
 

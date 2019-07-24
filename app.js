@@ -14,12 +14,12 @@ passport.use(auth_strategy);
 
 // --> Middlewares
 
-function has_been_set_up() {
-  return !!db.get('access_token').value();
+function is_initialized() {
+  return !!db.get('access_token');
 }
 
 function load_data() {
-  if (has_been_set_up()) {
+  if (is_initialized()) {
     api.fetch_activities().catch(e => {
       console.error(e);
     });
@@ -27,7 +27,7 @@ function load_data() {
 }
 
 const one_time_only = (req, res, next) => {
-  if (has_been_set_up()) {
+  if (is_initialized()) {
     const error = 'Already set up';
     return res.status(400).json({ error });
   }
@@ -46,6 +46,10 @@ const password_protected = (req, res, next) => {
   res.status(401).send('Authentication required.');
 }
 
+const db_fetch = (key) => {
+  return (req, res) => { res.json(db.get(key)) };
+}
+
 const fitbit_authenticate = passport.authenticate('fitbit', {
   session: false,
   successRedirect: '/',
@@ -59,17 +63,8 @@ app.get('/login',     one_time_only,  fitbit_authenticate);
 app.get('/callback',  one_time_only,  fitbit_authenticate);
 
 // -------> Data
-app.get('/stats', password_protected, async (req, res) => {
-  res.json(
-    db
-      .get('stats')
-      .value()
-  );
-});
-
-app.get('/user', password_protected, async (req, res) => {
-  res.json(db.get('user').value());
-});
+app.get('/stats', password_protected, db_fetch('stats'));
+app.get('/user', password_protected, db_fetch('user'));
 
 // --> Default error handler
 app.use(function (err, req, res, next) {
