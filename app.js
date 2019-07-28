@@ -18,11 +18,26 @@ function is_initialized() {
   return !!db.get('access_token');
 }
 
-function load_data() {
+function load_data(req, res) {
   if (is_initialized()) {
-    api.fetch_activities().catch(e => {
-      console.error(e);
-    });
+    return api.fetch_activities()
+      .then(() => {
+        res && res.json({ ok: true });
+      })
+      .catch(e => {
+        console.error(e);
+        res && res.json({
+          ok: false,
+          error: e
+        });
+      });
+  }
+
+  if (res) {
+    res.json({
+      ok: false,
+      error: 'Uninitialized'
+    })
   }
 }
 
@@ -65,6 +80,7 @@ app.get('/callback',  one_time_only,  fitbit_authenticate);
 // -------> Data
 app.get('/stats', password_protected, db_fetch('stats'));
 app.get('/user', password_protected, db_fetch('user'));
+app.get('/refresh', password_protected, load_data);
 
 // --> Default error handler
 app.use(function (err, req, res, next) {
