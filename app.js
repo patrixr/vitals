@@ -72,17 +72,17 @@ app.use(function (err, req, res, next) {
   res.status(500).json({ error: 'Internal error' });
 })
 
+// --> Web app
+const Bundler     = require('parcel-bundler');
+const entryFile   = path.join(__dirname, 'webapp/index.html');
+const outDir      = path.join(__dirname, 'dist');
+const bundler     = new Bundler(entryFile, { outDir });
+
+app.use('/', password_protected, bundler.middleware());
+
 // --> Start
 app.listen(8000, () => {
   console.log('--> Server is running on port 8000');
-
-  const Bundler     = require('parcel-bundler');
-  const entryFile   = path.join(__dirname, 'webapp/index.html');
-  const outDir      = path.join(__dirname, 'dist');
-  const bundler     = new Bundler(entryFile, { outDir });
-
-  app.use('/', password_protected, bundler.middleware());
-
 
   //
   // Poll data

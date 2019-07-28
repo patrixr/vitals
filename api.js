@@ -95,7 +95,8 @@ class API {
       },
       data: qs.stringify({
         grant_type: 'refresh_token',
-        refresh_token: db.get('refresh_token')
+        refresh_token: db.get('refresh_token'),
+        expires_in: 31536000
       }),
       url
     });
