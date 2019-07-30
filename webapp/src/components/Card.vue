@@ -20,19 +20,40 @@ export default {
 
   .vitals-card {
     color: $reversed-text-color;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
+    background-color: white;
     padding: 30px;
-    .subtitle {
+    padding-bottom: 50px;
+    position: relative;
+
+    &:not(:first-child) {
+      margin-top: -20px;
+    }
+
+    .text-secondary, .subtitle {
       color: $light-text-color;
     }
-    .title {
+    .text-main, .title {
       color: $reversed-text-color;
+    }
+
+    .text-main {
+      font-size: 1.3rem;
+    }
+
+    .text-secondary {
+      font-size: 0.9rem;
+    }
+
+    &:not(.fill) {
+      border-radius: 20px;
+      box-shadow: 0px 0px 12px 1px #444;
+      z-index: 2;
     }
     &.fill {
       background-color: $main-color;
       color: $text-color;
-      .title {
+      z-index: 1;
+      .text-main, .title {
         color: $text-color;
       }
     }

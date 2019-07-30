@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <div class="hearbeat">
     <fa-icon icon="heartbeat" size="4x" class="heart animated heartBeat"></fa-icon>
   </div>

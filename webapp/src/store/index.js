@@ -2,6 +2,7 @@ import Vue            from "vue";
 import Vuex           from "vuex";
 import axios          from "axios";
 import _              from "lodash";
+import moment         from "moment-timezone"
 
 Vue.use(Vuex);
 
@@ -36,13 +37,45 @@ export default new Vuex.Store({
   },
   getters: {
     summary:          getter('stats.summary'),
-    weight:           getter('stats.weight'),
+    bodyHistory:      getter('stats.weight'),
     fat:              getter('stats.fat'),
-    heartbeatHistory: getter('stats.activities-heart-intraday'),
+    heartbeatHistory: getter('stats.activities-heart-intraday.dataset', []),
     user:             getter('user'),
 
-    updatedAt(state) {
-      return new Date(state.stats.update_at);
+    now(state) {
+      const tz = _.get(state, 'user.timezone');
+      if (!tz) {
+        return moment();
+      }
+      return moment().tz(tz);
+    },
+
+    body(state, getters) {
+      return _.last(getters.bodyHistory);
+    },
+
+    lastUpdate(state, getters) {
+      let lastHeartRate = getters.lastHeartRate;
+      let m = getters.now;
+
+      if (!lastHeartRate) {
+        return null;
+      }
+
+      const { time } = lastHeartRate;
+      const [ hour, minute ] = time.split(':');
+      m.set({ hour, minute });
+      return m.toDate();
+    },
+
+    heartHistoryDuration(state, getters) {
+      return Math.ceil(getters.heartbeatHistory.length / 60)
+    },
+
+    lastHeartRate(state) {
+      return _.last(
+        _.get(state, 'stats.activities-heart-intraday.dataset')
+      );
     }
   },
   actions: {
