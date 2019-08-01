@@ -1,23 +1,18 @@
-$name: "Quicksand";
+@import "./font-names.scss";
 
 @font-face {
-  font-family: #{$name}-Bold;
-  src: url(fonts/#{$name}-Bold.ttf);
+  font-family: #{$font-name}-Bold;
+  src: url(fonts/#{$font-name}-Bold.ttf);
 }
 @font-face {
-  font-family: #{$name}-Light;
-  src: url(fonts/#{$name}-Light.ttf);
+  font-family: #{$font-name}-Light;
+  src: url(fonts/#{$font-name}-Light.ttf);
 }
 @font-face {
-  font-family: #{$name}-Medium;
-  src: url(fonts/#{$name}-Medium.ttf);
+  font-family: #{$font-name}-Medium;
+  src: url(fonts/#{$font-name}-Medium.ttf);
 }
 @font-face {
-  font-family: #{$name}-Regular;
-  src: url(fonts/#{$name}-Regular.ttf);
+  font-family: #{$font-name}-Regular;
+  src: url(fonts/#{$font-name}-Regular.ttf);
 }
-
-$base-font: #{$name}-Regular;
-$base-font-bold: #{$name}-Bold;
-$base-font-light: #{$name}-Light;
-$base-font-medium: #{$name}-Medium;

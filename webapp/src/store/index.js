@@ -37,7 +37,7 @@ export default new Vuex.Store({
   },
   getters: {
     summary:          getter('stats.summary'),
-    bodyHistory:      getter('stats.weight'),
+    bodyHistory:      getter('stats.weight', []),
     fat:              getter('stats.fat'),
     heartbeatHistory: getter('stats.activities-heart-intraday.dataset', []),
     user:             getter('user'),
@@ -52,6 +52,10 @@ export default new Vuex.Store({
 
     body(state, getters) {
       return _.last(getters.bodyHistory);
+    },
+
+    oldestBodyRecord(state, getters) {
+      return _.first(getters.bodyHistory);
     },
 
     lastUpdate(state, getters) {
@@ -74,6 +78,12 @@ export default new Vuex.Store({
 
     lastHeartRate(state) {
       return _.last(
+        _.get(state, 'stats.activities-heart-intraday.dataset')
+      );
+    },
+
+    firstHeartRate(state) {
+      return _.first(
         _.get(state, 'stats.activities-heart-intraday.dataset')
       );
     }

@@ -13,6 +13,13 @@ Vue.filter("truncateFloat", (num) => {
   return num.toFixed(1);
 });
 
+Vue.filter("truncateSeconds", (time) => {
+  if (/^\d\d:\d\d:\d\d$/.test(time)) {
+    return time.replace(/:\d\d$/, '');
+  }
+  return time;
+});
+
 Vue.filter("timeSince", (date) => {
     let seconds   = Math.floor((new Date() - date) / 1000);
     let interval  = Math.floor(seconds / 31536000);

@@ -12,7 +12,11 @@ import {
   faHeartbeat,
   faWeight,
   faPercent,
-  faChartBar
+  faChartBar,
+  faShoePrints,
+  faBurn,
+  faRunning,
+  faRoute
 } from '@fortawesome/free-solid-svg-icons'
 
 import 'element-ui/lib/theme-chalk/index.css'
@@ -25,7 +29,7 @@ Vue.use(ElementUI, { locale });
 Vue.use(Trend)
 
 // --> Font aweomse
-library.add(faHeartbeat, faWeight, faPercent, faChartBar);
+library.add(faHeartbeat, faWeight, faPercent, faChartBar, faShoePrints, faBurn, faRunning, faRoute);
 Vue.component('fa-icon', FontAwesomeIcon);
 Vue.component('spacing', Spacing)
 
