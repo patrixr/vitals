@@ -8,7 +8,7 @@ const _       = require('lodash');
 
 const DATA_POINTS = {
   ACTIVITY: user => {
-    const date = moment().tz(user.timezone).subtract(1, 'day').format('YYYY-MM-DD');
+    const date = moment().tz(user.timezone).format('YYYY-MM-DD');
     return `activities/date/${date}.json`;
   },
 
