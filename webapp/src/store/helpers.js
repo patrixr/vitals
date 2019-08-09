@@ -31,12 +31,20 @@ export default {
     }
   },
 
-  last(key) {
-    return (state) => _.last(state[key]);
+  last(key, opts = {}) {
+    const { sortBy } = opts;
+    return (state) => {
+      const list = sortBy ? _.sortBy(state[key], sortBy) : state[key];
+      return _.last(list);
+    }
   },
 
-  first(key) {
-    return (state) => _.first(state[key]);
+  first(key, opts = {}) {
+    const { sortBy } = opts;
+    return (state) => {
+      const list = sortBy ? _.sortBy(state[key], sortBy) : state[key];
+      return _.first(list);
+    }
   },
 
   toMap(key) {
