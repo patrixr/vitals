@@ -16,6 +16,7 @@ services:
       FITBIT_CLIENT_SECRET: ${FITBIT_CLIENT_SECRET}
       APP_LOGIN: ${APP_LOGIN}
       APP_PASSWORD: ${APP_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
     volumes:
       - "/opt/vitals:/opt/vitals"
 

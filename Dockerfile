@@ -19,5 +19,7 @@ COPY --from=dep /sample/node_modules ./node_modules
 RUN mkdir -p /opt/vitals
 VOLUME /opt/vitals
 
+ENV HOME /opt/vitals
+
 EXPOSE 2368
 CMD ["yarn", "start"]

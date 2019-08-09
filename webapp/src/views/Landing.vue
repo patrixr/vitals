@@ -86,22 +86,25 @@
     },
     methods: {
       pollData() {
-        this.$store.dispatch('pollData').catch(e => console.error(e));
+        this.$store
+          .dispatch('fetchAll')
+          .catch(console.error);
       }
     },
     computed: {
       ...mapGetters([
         'user', 'lastHeartRate', 'firstHeartRate',
-        'lastUpdate', 'heartbeatHistory',
+        'lastUpdate', 'heartbeat',
         'heartHistoryDuration', 'bodyHistory',
-        'body', 'oldestBodyRecord', 'summary'
+        'body', 'oldestBodyRecord', 'stats',
+        'distances'
       ]),
 
       loaded() {
         return !!this.lastHeartRate;
       },
 
-      heartBeatDataPoints: mapBy('heartbeatHistory', 'value'),
+      heartBeatDataPoints: mapBy('heartbeat', 'value'),
       weightDataPoints: mapBy('bodyHistory', 'weight'),
 
       bodyStats() {
@@ -114,26 +117,25 @@
 
       activityStats() {
         return [
-          { icon: 'shoe-prints', title: 'Steps', value: this.summary.steps },
-          { icon: 'burn', title: 'Calories', value: this.summary.caloriesOut },
+          { icon: 'shoe-prints', title: 'Steps', value: this.stats.steps },
+          { icon: 'burn', title: 'Calories', value: this.stats.caloriesOut },
           {
             icon: 'running',
             title: 'Active Minutes',
-            value: this.summary.lightlyActiveMinutes
-              + this.summary.fairlyActiveMinutes
-              + this.summary.veryActiveMinutes
+            value: this.stats.lightlyActiveMinutes
+              + this.stats.fairlyActiveMinutes
+              + this.stats.veryActiveMinutes
           },
           {
             icon: 'route',
             title: 'Distance',
-            value: _.find(this.summary.distances, ['activity', 'total']).distance + ' km'
+            value: _.find(this.distances, ['activity', 'total']).distance + ' km'
           }
         ]
       }
     },
     created() {
       this.pollData();
-      this.$store.dispatch('fetchUser');
       this.polling = setInterval(() => this.pollData(), 5*60*1000);
     },
     beforeDestroy () {

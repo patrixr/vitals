@@ -1,62 +1,43 @@
 import Vue            from "vue";
 import Vuex           from "vuex";
-import axios          from "axios";
 import _              from "lodash";
-import moment         from "moment-timezone"
+import axios          from "axios";
+import moment         from "moment-timezone";
+import h              from "./helpers";
 
 Vue.use(Vuex);
-
-// ---- Helpers
-
-function apiAction(url, mutator) {
-  return async ({ commit }) => {
-    const { data } = await axios.get(url);
-    commit(mutator, data);
-    return data
-  };
-}
-
-function getter(key, defaultValue) {
-  return (state) => {
-    return _.get(state, key) || defaultValue;
-  };
-}
-
-function setter(key) {
-  return (state, data) => {
-    state[key] = data;
-  }
-}
 
 // ---- Store
 
 export default new Vuex.Store({
   state: {
-    stats: {},
-    user: {}
+    authToken: localStorage.getItem('authToken'),
+    profiles:   [],
+    weight:     [],
+    heartbeat:  [],
+    stats:      [],
+    distances:  []
   },
   getters: {
-    summary:          getter('stats.summary'),
-    bodyHistory:      getter('stats.weight', []),
-    fat:              getter('stats.fat'),
-    heartbeatHistory: getter('stats.activities-heart-intraday.dataset', []),
-    user:             getter('user'),
+    authToken:        h.getter('authToken'),
+    distances:        h.getter('distances'),
+    heartbeat:        h.getter('heartbeat', []),
+    stats:            h.toMap('stats'),
+    bodyHistory:      h.getter('weight', []),
+    body:             h.last('weight'),
+    oldestBodyRecord: h.first('weight'),
+    user:             h.first('profiles'),
+    firstHeartRate:   h.first('heartbeat'),
+    lastHeartRate:    h.last('heartbeat'),
 
-    now(state) {
-      const tz = _.get(state, 'user.timezone');
+    now(state, getters) {
+      const tz = _.get(getters, 'user.timezone');
       if (!tz) {
         return moment();
       }
       return moment().tz(tz);
     },
 
-    body(state, getters) {
-      return _.last(getters.bodyHistory);
-    },
-
-    oldestBodyRecord(state, getters) {
-      return _.first(getters.bodyHistory);
-    },
 
     lastUpdate(state, getters) {
       let lastHeartRate = getters.lastHeartRate;
@@ -73,27 +54,41 @@ export default new Vuex.Store({
     },
 
     heartHistoryDuration(state, getters) {
-      return Math.ceil(getters.heartbeatHistory.length / 60)
-    },
-
-    lastHeartRate(state) {
-      return _.last(
-        _.get(state, 'stats.activities-heart-intraday.dataset')
-      );
-    },
-
-    firstHeartRate(state) {
-      return _.first(
-        _.get(state, 'stats.activities-heart-intraday.dataset')
-      );
+      return Math.ceil(getters.heartbeat.length / 60)
     }
   },
   actions: {
-    fetchUser:  apiAction('/user', 'setUser'),
-    pollData:   apiAction('/stats', 'setStats')
+    fetchProfiles:  h.load('profiles').andCommit('setProfiles'),
+    fetchStats:     h.load('stats').andCommit('setStats'),
+    fetchWeight:    h.load('weight').andCommit('setWeight'),
+    fetchDistances: h.load('distances').andCommit('setDistances'),
+    fetchHeartbeat: h.load('heartbeat').andCommit('setHeartbeat'),
+
+    fetchAll({ dispatch }) {
+      return Promise.all([
+        dispatch('fetchProfiles'),
+        dispatch('fetchStats'),
+        dispatch('fetchWeight'),
+        dispatch('fetchDistances'),
+        dispatch('fetchHeartbeat')
+      ])
+    },
+
+    async login(ctx, credentials) {
+      const { data: { token } } = await axios({
+        url: '/users/login',
+        method: 'POST',
+        data: credentials
+      })
+      ctx.commit('setAuthToken', token);
+    }
   },
   mutations: {
-    setStats: setter('stats'),
-    setUser:  setter('user')
+    setProfiles:   h.setter('profiles'),
+    setStats:      h.setter('stats'),
+    setWeight:     h.setter('weight'),
+    setDistances:  h.setter('distances'),
+    setHeartbeat:  h.setter('heartbeat'),
+    setAuthToken:  h.setter('authToken', { persist: true })
   }
 });
