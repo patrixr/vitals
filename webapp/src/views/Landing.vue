@@ -52,8 +52,8 @@
           smooth
         >
         </trend>
-        <div class="time-indicator right">{{ oldestBodyRecord.date }}</div>
-        <div class="time-indicator left">{{ body.date }}</div>
+        <div class="time-indicator left">{{ oldestBodyRecord.date }}</div>
+        <div class="time-indicator right">{{ body.date }}</div>
       </div>
     </vitals-card>
 
