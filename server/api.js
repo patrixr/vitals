@@ -80,7 +80,7 @@ class API {
     const now       = await this.now();
     const resource  = cms.resource('weight')
     const dateTo    = now.format('YYYY-MM-DD');
-    const dateFrom  = now.subtract(4, 'day').format('YYYY-MM-DD');
+    const dateFrom  = now.subtract(2, 'months').format('YYYY-MM-DD');
     const url       = await this.buildUrl(`body/log/weight/date/${dateFrom}/${dateTo}.json`);
 
     const { data: { weight } } = await this.userRequest(url);
