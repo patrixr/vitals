@@ -4,4 +4,5 @@ module.exports = {
   LOGIN: process.env.APP_LOGIN,
   PASSWORD: process.env.APP_PASSWORD,
   JWT_SECRET: process.env.JWT_SECRET,
+  SENTRY_DSN: process.env.SENTRY_DSN
 };

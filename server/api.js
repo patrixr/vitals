@@ -5,6 +5,7 @@ const config    = require('./config');
 const moment    = require('moment-timezone');
 const _         = require('lodash');
 const { cache } = require('./cache');
+const Sentry    = require('./sentry');
 
 // Helpers
 
@@ -310,7 +311,13 @@ class API {
         await this[method]()
       } catch(e) {
         const msg = _.get(e, 'response.data.errors[0].message') || e;
-        console.error(msg);
+        if (msg) {
+          console.error(msg);
+          Sentry.captureMessage(msg);
+        } else {
+          console.error(e);
+          Sentry.captureException(e);
+        }
       }
     }
 

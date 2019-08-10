@@ -4,6 +4,9 @@ const passport        = require('passport');
 const auth_strategy   = require('./auth_strategy');
 const api             = require('./api');
 const cms             = require('./cms');
+const Sentry          = require('./sentry');
+
+require("./sentry");
 
 const app = express();
 
@@ -42,6 +45,7 @@ app.use('/', bundler.middleware());
 
 app.use(function (err, req, res, next) {
   console.error(err)
+  Sentry.captureException(err);
   res.status(500).json({ error: 'Internal error' });
 })
 
