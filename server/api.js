@@ -277,7 +277,7 @@ class API {
         expires_in:     31536000
       }),
       url
-    }).then(async (data) => {
+    }).then(async ({ data }) => {
       const { access_token, refresh_token } = data;
 
       await savePair('access_token', access_token).to('strings');

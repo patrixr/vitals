@@ -18,9 +18,9 @@ before_install:
 - chmod +x docker-compose
 - sudo mv docker-compose /usr/local/bin
 script:
+- docker-compose -H "ssh://$REMOTE_HOST" build
 - docker-compose -H "ssh://$REMOTE_HOST" down
 - docker-compose -H "ssh://$REMOTE_HOST" pull
-- docker-compose -H "ssh://$REMOTE_HOST" build
 - docker-compose -H "ssh://$REMOTE_HOST" up -d
 env:
   global:
