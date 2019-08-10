@@ -310,10 +310,10 @@ class API {
       try {
         await this[method]()
       } catch(e) {
-        const msg = _.get(e, 'response.data.errors[0].message') || e;
+        const msg = _.get(e, 'response.data.errors[0].message');
         if (msg) {
           console.error(msg);
-          Sentry.captureMessage(msg);
+          Sentry.captureException(new Error(msg));
         } else {
           console.error(e);
           Sentry.captureException(e);
