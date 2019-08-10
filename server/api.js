@@ -63,7 +63,7 @@ class API {
       ..._.map(summary, (val, key) => _.isNumber(val) ? savePair(key, val).to('stats') : null)
     ]);
 
-    return Promise.all(tasks);
+    return await Promise.all(tasks);
   }
 
   /**
@@ -117,7 +117,7 @@ class API {
       .map(obj => heart.create(obj))
       .value();
 
-    return Promise.all(tasks);
+    return await Promise.all(tasks);
   }
 
   /**
@@ -248,7 +248,6 @@ class API {
         await this.refresh_token();
         return this.request(options, false);
       }
-      console.error(e);
       throw e;
     }
   }
@@ -282,12 +281,14 @@ class API {
 
       await savePair('access_token', access_token).to('strings');
       await savePair('refresh_token', refresh_token).to('strings');
-      this.refreshPromise = null;
+      this._refresh = null;
     })
     .catch((e) => {
-      this.refreshPromise = null
+      this._refresh = null
       throw e;
     });
+
+    return this._refresh;
   }
 
   /**
@@ -304,11 +305,24 @@ class API {
       return;
     }
 
-    this.fetchAllActivities();
+    const run = async (method) => {
+      try {
+        await this[method]()
+      } catch(e) {
+        const msg = _.get(e, 'response.data.errors[0].message') || e;
+        console.error(msg);
+      }
+    }
+
+    const wrap = (method) => {
+      return () => run(method);
+    }
+
+    run('fetchAllActivities');
     this.polls = [
-      setInterval(() => this.fetchHeart(), 5 * min),
-      setInterval(() => this.fetchSummary(), 5 * min),
-      setInterval(() => this.fetchWeight(), 24 * hour),
+      setInterval(wrap('fetchHeart'), 5 * min),
+      setInterval(wrap('fetchSummary'), 5 * min),
+      setInterval(wrap('fetchWeight'), 24 * hour),
     ];
   }
 
