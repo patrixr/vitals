@@ -14,7 +14,7 @@ The idea is to build a dashboard that my father can regularly check to ensure th
 
 I decided to leverage my enthusiasm for Fitbit products with my understanding of the cloud to build this.
 
-I settled on a VueJS + ExpressJS tech stack for fast prototyping. (https://github.com/patrixr).
+I settled on a VueJS + ExpressJS tech stack for fast prototyping.
 
 Here's a very basic diagram of the concept
 
