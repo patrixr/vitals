@@ -20,7 +20,11 @@ Here's a very basic diagram of the concept
 
 ![](https://files.tronica.io/manual-uploads/vitals_diagram.png)
 
+## The Result
 
+![](https://files.tronica.io/manual-uploads/vitals_app_screenshot_montage_large.png)
+
+## More
 
 Read the full article [HERE](https://dev.to/patrixr/publishing-my-vitals-over-the-cloud-132e)
 
