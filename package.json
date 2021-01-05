@@ -18,7 +18,7 @@
     "@sentry/node": "5.6.1",
     "@vue/component-compiler-utils": "^2.5.0",
     "add": "^2.0.6",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "babel-preset-env": "^1.7.0",
     "element-ui": "^2.10.1",
     "express": "^4.16.4",
